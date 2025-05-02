@@ -1,0 +1,6 @@
+test_images
+debug_output
+results.json
+__pycache__/
+*/__pycache__/
+**/__pycache__/

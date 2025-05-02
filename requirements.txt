@@ -1,0 +1,10 @@
+numpy>=1.19.0
+opencv-python>=4.5.0
+pillow>=8.0.0
+matplotlib>=3.5.0
+ultralytics>=8.0.0
+paddlepaddle>=2.4.0
+paddleocr>=2.6.0
+python-Levenshtein>=0.20.0
+pytesseract>=0.3.8
+pyyaml>=6.0.0
