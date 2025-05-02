@@ -112,8 +112,10 @@ def process_license_image(image_path, yolo_model, ocr_engine, ocr_preprocessing_
         entry = validated_data.get(category)
         start_date = entry['start_date'] if entry else "--"
         end_date = entry['end_date'] if entry else "--"
-        final_output[category] = {'start_date': start_date, 'end_date': end_date}
-        print(f"  {category:<8} | {start_date:<12} | {end_date:<12}")
+        # Only include categories with valid dates
+        if start_date != "--" or end_date != "--":
+            final_output[category] = {'start_date': start_date, 'end_date': end_date}
+            print(f"  {category:<8} | {start_date:<12} | {end_date:<12}")
 
     return final_output
 

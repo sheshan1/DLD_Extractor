@@ -3,7 +3,7 @@
 # Input configuration
 input:
   # Use one of the following:
-  # image_path: "test_images/170349.jpg"  # Path to a single image file
+  # image_path: "/home/sheshan/Desktop/Projects/DLD_Extractor/test_images/119223.jpg"  # Path to a single image file
   folder_path: "test_images"          # Path to a folder with multiple images
 
 # Output configuration

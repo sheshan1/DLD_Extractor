@@ -332,7 +332,10 @@ def process_ocr_rows(structured_rows):
         entry = final_validated_data.get(category, {'start_date': "--", 'end_date': "--"})
         start_date = entry['start_date']
         end_date = entry['end_date']
-        final_output_dict[category] = {'start_date': start_date, 'end_date': end_date}
-        print(f"  {category:<8} | {start_date:<12} | {end_date:<12}")
+        
+        # Only add to final output if at least one date exists
+        if start_date != "--" or end_date != "--":
+            final_output_dict[category] = {'start_date': start_date, 'end_date': end_date}           
+            print(f"  {category:<8} | {start_date:<12} | {end_date:<12}")
 
     return final_output_dict
