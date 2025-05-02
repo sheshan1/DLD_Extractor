@@ -62,26 +62,3 @@ def validate_and_format_date(text):
                 continue
     
     return None
-
-def add_years_to_date(source_date, years_to_add):
-    """
-    Safely adds years to a date object, handling leap years.
-    
-    Args:
-        source_date: Date object to add years to
-        years_to_add: Number of years to add
-        
-    Returns:
-        New date object with years added, or None if operation fails
-    """
-    try:
-        new_year = source_date.year + years_to_add
-        return source_date.replace(year=new_year)
-    except ValueError:
-        if source_date.month == 2 and source_date.day == 29:
-            try:
-                return date(new_year, 2, 28)
-            except ValueError:
-                return None
-        else:
-            return None

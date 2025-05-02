@@ -9,83 +9,22 @@ from PIL import Image
 
 from src.utils.config import DEBUG_SAVE_INTERMEDIATES
 
-def preprocess_image(image_array, methods=None):
+def preprocess_image(image_array):
     """
     Applies preprocessing steps to an OpenCV image array.
     
     Args:
         image_array: Input image as numpy array
-        methods: List of preprocessing methods to apply
         
     Returns:
-        Preprocessed image as numpy array, or None if processing fails
+        Preprocessed image as numpy array
     """
-    if methods is None:
-        methods = ['gray']
-        
-    if image_array is None or image_array.size == 0:
-        print("Warning: preprocess_image received empty array.")
-        return None
         
     img = image_array.copy()
 
-    try:  # Wrap core processing in try-except
-        is_gray = len(img.shape) == 2 or (len(img.shape) == 3 and img.shape[2] == 1)
-        original_was_color = len(image_array.shape) == 3 and not is_gray
+    img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
-        if 'gray' in methods and not is_gray:
-            img_gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-            img = img_gray if img_gray is not None else img
-            is_gray = True
-            
-        if 'median_blur' in methods and img is not None:
-            img = cv2.medianBlur(img, 3)
-            
-        if 'gaussian_blur' in methods and img is not None:
-            img = cv2.GaussianBlur(img, (5, 5), 0)
-            
-        if 'denoise' in methods and img is not None:
-            if original_was_color and not is_gray:  # Need color input for fastNlMeansDenoisingColored
-                img_denoise_input = cv2.cvtColor(img, cv2.COLOR_GRAY2BGR)  # Convert back if needed
-                if img_denoise_input is not None:
-                    img = cv2.fastNlMeansDenoisingColored(img_denoise_input, None, 10, 10, 7, 21)
-                    is_gray = False
-            elif is_gray:
-                img = cv2.fastNlMeansDenoising(img, None, 10, 7, 21)
-                
-        if 'hist_eq' in methods and is_gray and img is not None:
-            img = cv2.equalizeHist(img)
-            
-        if 'clahe' in methods and is_gray and img is not None:
-            clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8, 8))
-            img = clahe.apply(img)
-            
-        if 'sharpen' in methods and img is not None:
-            kernel = np.array([[0, -1, 0], [-1, 5, -1], [0, -1, 0]])
-            img = cv2.filter2D(img, -1, kernel)
-            
-        thresholded = False
-        if 'multi_threshold' in methods and is_gray and img is not None:
-            _, th1 = cv2.threshold(img, 0, 255, cv2.THRESH_BINARY+cv2.THRESH_OTSU)
-            th2 = cv2.adaptiveThreshold(img, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 11, 2)
-            img = cv2.bitwise_and(th1, th2)
-            thresholded = True
-            
-        if 'adaptive_threshold' in methods and not thresholded and is_gray and img is not None:
-            img = cv2.adaptiveThreshold(img, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 11, 2)
-
-        if img is None or img.size == 0:
-            print("Warning: Preprocessing resulted in empty image.")
-            return None
-            
-        return img
-        
-    except cv2.error as cv_err:
-        print(f"OpenCV error during preprocessing: {cv_err}")
-        return None  # Return None on OpenCV errors
-    except Exception as e:
-        print(f"Unexpected error during preprocessing: {e}")
-        return None
+    return img
 
 def preprocess_for_ocr(license_crop_pil, table_crop_pil, debug_dir=None):
     """

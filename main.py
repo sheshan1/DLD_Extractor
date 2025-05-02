@@ -30,7 +30,6 @@ from src.utils.config import (
     YOLO_MODEL_PATH,
     DEBUG_OUTPUT_DIR, 
     DEBUG_SAVE_INTERMEDIATES,
-    DEFAULT_OCR_PREPROCESSING,
     LICENSE_CLASS_ID,
     TABLE_CLASS_ID,
     VEHICLE_CATEGORIES,
@@ -42,7 +41,7 @@ from src.utils.config import (
     OCR_USE_GPU
 )
 
-def process_license_image(image_path, yolo_model, ocr_engine, ocr_preprocessing_methods=None):
+def process_license_image(image_path, yolo_model, ocr_engine):
     """
     Detects components, corrects orientation, runs OCR on table, returns final data.
     
@@ -50,7 +49,6 @@ def process_license_image(image_path, yolo_model, ocr_engine, ocr_preprocessing_
         image_path: Path to the input image
         yolo_model: Loaded YOLO model
         ocr_engine: Initialized OCR engine
-        ocr_preprocessing_methods: List of preprocessing methods to apply
         
     Returns:
         Dictionary containing extracted data for each vehicle category
@@ -92,7 +90,6 @@ def process_license_image(image_path, yolo_model, ocr_engine, ocr_preprocessing_
     structured_rows = run_ocr_pipeline(
         table_image_array, 
         ocr_engine, 
-        ocr_preprocessing_methods, 
         debug_prefix=f"{base_name}_table",
         debug_dir=debug_img_dir
     )
@@ -112,6 +109,7 @@ def process_license_image(image_path, yolo_model, ocr_engine, ocr_preprocessing_
         entry = validated_data.get(category)
         start_date = entry['start_date'] if entry else "--"
         end_date = entry['end_date'] if entry else "--"
+
         # Only include categories with valid dates
         if start_date != "--" or end_date != "--":
             final_output[category] = {'start_date': start_date, 'end_date': end_date}
@@ -185,10 +183,11 @@ def main():
         for img_file in image_files:
             image_path = os.path.join(input_folder, img_file)
             final_data = process_license_image(
-                image_path, yolo_model, ocr_engine, DEFAULT_OCR_PREPROCESSING
+                image_path, yolo_model, ocr_engine
             )
-            if final_data:
-                all_results[img_file] = final_data
+            # Save results for each image, if null save empty dict
+            all_results[img_file] = final_data
+
     elif INPUT_IMAGE_PATH:
         image_path = INPUT_IMAGE_PATH
         if not os.path.isfile(image_path):
@@ -197,10 +196,10 @@ def main():
             
         print(f"\nProcessing single image: {image_path}")
         final_data = process_license_image(
-            image_path, yolo_model, ocr_engine, DEFAULT_OCR_PREPROCESSING
+            image_path, yolo_model, ocr_engine
         )
-        if final_data:
-            all_results[os.path.basename(image_path)] = final_data
+        # Save results for each image, if null save empty dict
+        all_results[os.path.basename(image_path)] = final_data
 
     # Save results
     save_results_as_json(all_results, OUTPUT_RESULT_FILE)

@@ -111,14 +111,13 @@ def group_lines(ocr_results, y_tolerance=15):
         print(f"Error during line grouping: {group_err}")
         return []  # Return empty list on error
 
-def run_ocr_pipeline(image_array, ocr_engine, preprocessing_methods=None, debug_prefix="", debug_dir=None):
+def run_ocr_pipeline(image_array, ocr_engine, debug_prefix="", debug_dir=None):
     """
     Runs preprocessing, OCR, and line grouping on an image array.
     
     Args:
         image_array: Input image as numpy array
         ocr_engine: Initialized OCR engine
-        preprocessing_methods: List of preprocessing methods to apply
         debug_prefix: Prefix for debug output messages
         debug_dir: Directory to save debug images
         
@@ -130,7 +129,7 @@ def run_ocr_pipeline(image_array, ocr_engine, preprocessing_methods=None, debug_
         return []
         
     print(f"  [{debug_prefix}] Running OCR preprocessing...")
-    preprocessed = preprocess_image(image_array, preprocessing_methods)
+    preprocessed = preprocess_image(image_array)
     if preprocessed is None:
         print(f"Warning [{debug_prefix}]: Preprocessing failed.")
         return []

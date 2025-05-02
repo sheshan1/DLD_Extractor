@@ -3,8 +3,8 @@
 # Input configuration
 input:
   # Use one of the following:
-  # image_path: "/home/sheshan/Desktop/Projects/DLD_Extractor/test_images/119223.jpg"  # Path to a single image file
-  folder_path: "test_images"          # Path to a folder with multiple images
+  image_path: "/home/sheshan/Desktop/Projects/DLD_Extractor/test_images/181195.jpg"  # Path to a single image file
+  # folder_path: "test_images"          # Path to a folder with multiple images
 
 # Output configuration
 output:
@@ -21,12 +21,6 @@ ocr:
   use_angle_cls: true          # Whether to use angle classification
   language: "en"               # OCR language
   use_gpu: false               # Whether to use GPU for OCR
-  preprocessing_methods:       # List of preprocessing methods to apply
-    - "gray"
-    # - "adaptive_threshold"
-    # - "denoise"
-    # - "clahe"
-    # - "hist_eq"
 
 # Debug configuration
 debug:

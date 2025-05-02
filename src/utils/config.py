@@ -50,8 +50,7 @@ def create_default_config():
         'ocr': {
             'use_angle_cls': True,
             'language': 'en',
-            'use_gpu': False,
-            'preprocessing_methods': ['gray']
+            'use_gpu': False
         },
         'debug': {
             'save_intermediates': True,
@@ -75,7 +74,6 @@ TABLE_CLASS_ID = CONFIG['model']['table_class_id']
 VEHICLE_CATEGORIES = CONFIG['vehicle_categories']
 
 # --- Constants for preprocessing and debugging ---
-DEFAULT_OCR_PREPROCESSING = CONFIG['ocr']['preprocessing_methods']
 DEBUG_SAVE_INTERMEDIATES = CONFIG['debug']['save_intermediates']
 DEBUG_OUTPUT_DIR = Path(CONFIG['debug']['output_dir'])
 if not DEBUG_OUTPUT_DIR.is_absolute():
