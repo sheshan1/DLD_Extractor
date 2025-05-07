@@ -1,6 +1,6 @@
 # License OCR Pipeline
 
-A modular Python system for processing driver's license documents through computer vision and OCR. The pipeline detects license components, extracts table data, and produces structured output of vehicle categories with their validity dates.
+A modular Python system for processing driver's license documents through computer vision and OCR. The pipeline detects license components, extracts table data, and produces a structured output of vehicle categories with their validity dates.
 ## Features
 
 - **License Document Detection**: Uses YOLO v8 object detection to identify license and table components
@@ -527,7 +527,7 @@ model:
      ocr:
        use_gpu: true
      ```
-   - Reduce resolution of input images if performance is still an issue
+   - Reduce the resolution of input images if performance is still an issue
    - Process images in smaller batches
    - Close other applications when processing large numbers of images
 
@@ -577,13 +577,6 @@ The project includes a notebook (`yolo-training.ipynb`) for training the YOLO mo
 2. Configure the notebook parameters
 3. Run the training process
 4. Export the trained model as `best.pt`
-
-### Testing
-
-Run tests with:
-```bash
-pytest tests/
-```
 
 ### Future Enhancements
 
